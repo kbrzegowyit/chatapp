@@ -1,12 +1,23 @@
 import express from 'express';
+const app = express();
+import { createServer } from 'http';
+const server = createServer(app);
+import { Server } from "socket.io";
+const io = new Server(server);
+import path from 'path';
 
 const PORT = process.env.PORT || 3000;
 
-const app = express();
-
 app.get('/', (req, res) => {
-    res.json("Chatapp is working").send(200);
-    return;
+  res.sendFile(path.join(process.cwd(), '/index.html'));
 });
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+io.on('connection', (socket) => {
+  socket.on('message-incoming', (msg) => {
+    io.emit('message-outgoing', msg);
+  });
+});
+
+server.listen(3000, () => {
+  console.log('listening on port 3000');
+});
