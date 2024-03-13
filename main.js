@@ -4,12 +4,19 @@ import { createServer } from 'http';
 const server = createServer(app);
 import { Server } from "socket.io";
 const io = new Server(server);
-import path from 'path';
 
 const PORT = process.env.PORT || 3000;
 
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
 app.get('/', (req, res) => {
-  res.sendFile(path.join(process.cwd(), '/index.html'));
+  res.render('login');
+});
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+app.get('/chat', (req, res) => {
+  res.render('chat');
 });
 
 io.on('connection', (socket) => {
