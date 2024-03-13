@@ -9,13 +9,13 @@ const PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.render('login');
 });
-app.get('/register', (req, res) => {
+app.get('/register', (_req, res) => {
   res.render('register');
 });
-app.get('/chat', (req, res) => {
+app.get('/chat', (_req, res) => {
   res.render('chat');
 });
 
