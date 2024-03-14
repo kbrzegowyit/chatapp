@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="styles/chat.css">
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
     <div class="container">
@@ -22,27 +23,16 @@
             </div>
             <!-- Chat messages go here -->
             <div class="messages-container">
-                <div class="message my-message">
-                    <p><strong>You:</strong> Hello!</p>
-                </div>
-                <div class="message other-message">
-                    <p><strong>User 2:</strong> Hi, how are you?</p>
-                </div>
-                <div class="message my-message">
-                    <p><strong>You:</strong> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quia, eum dolorum quas eligendi, delectus illum veniam expedita voluptatibus corporis beatae dignissimos minima facere? Sed maxime vel, consequatur mollitia rem molestiae.</p>
-                </div>
-                <div class="message other-message">
+                <!-- <div class="message other-message">
                     <p><strong>User 2:</strong> Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum debitis corporis dolores illum odio soluta ipsa magnam omnis deserunt! Necessitatibus quisquam pariatur numquam voluptates dolor ratione in nobis nulla omnis.</p>
-                </div>
-                <div class="message other-message">
-                    <p><strong>User 2:</strong> And you?</p>
                 </div>
                 <div class="message my-message">
                     <p><strong>You:</strong> Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
-                </div>
+                </div> -->
             </div>
             <input type="text" class="input-message" placeholder="Type a message...">
         </div>
     </div>
+    <script src="scripts/chat.js"></script>
 </body>
 </html>
