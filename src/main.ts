@@ -1,27 +1,33 @@
 import express from 'express';
-const app = express();
 import { createServer } from 'http';
-const server = createServer(app);
 import { Server } from "socket.io";
 import { Database } from './db/index.js';
+import { MainRoutes } from './routers/constatns.js';
+import { RepositoryFactory } from './repositories/factory.js';
+import { ControllerFactory } from './controllers/factory.js';
+import { ServiceFactory } from './services/factory.js';
+import { RouterFactory } from './routers/factory.js';
+
+const app = express();
+const server = createServer(app);
 const io = new Server(server);
 
 const PORT = process.env.PORT || 3000;
 
-const database = new Database();
+new Database();
+
+const repositoryFactory = new RepositoryFactory();
+const serviceFactory = new ServiceFactory(repositoryFactory.factory);
+const controllerFactory = new ControllerFactory(serviceFactory.factory);
+const routerFactory = new RouterFactory(controllerFactory.factory);
+
 // Add 404 page
 app.set('view engine', 'ejs');
+app.use(express.json());
 app.use(express.static('public'));
 
-app.get('/', (_req, res) => {
-  res.render('login');
-});
-app.get('/register', (_req, res) => {
-  res.render('register');
-});
-app.get('/chat', (_req, res) => {
-  res.render('chat');
-});
+app.use(MainRoutes.VIEWS, routerFactory.factory.viewRouter.router);
+app.use(MainRoutes.API, routerFactory.factory.apiRouter.router);
 
 const users: { nick: string, socket: string }[] = [];
 

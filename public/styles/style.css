@@ -5,7 +5,7 @@ body {
     height: 100vh;
     margin: 0;
     /* background-color: #f0f0f0; */
-    background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     font-family: Arial, sans-serif;
 }
 .login-form {

@@ -1,6 +1,6 @@
 import { User } from "../models/user.js";
 
-interface IUserRepository {
+export interface IUserRepository {
     save(user: User): Promise<User>;
     retrieveById(id: number): Promise<User | null>;
     delete(id: number): Promise<number>;
@@ -11,6 +11,7 @@ export class UserRepository implements IUserRepository {
         try {
             return await User.create(user);
         } catch (error) {
+            console.log('UserRepository.error:', error);
             throw new Error("Failed to create user.");
         }
     }
