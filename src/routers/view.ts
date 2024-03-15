@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ViewsRoutes } from "./constatns.js";
+import { DefaultRoutes, ViewsRoutes } from "./constatns.js";
 
 export class ViewRouter {
     public readonly router: Router;
@@ -14,6 +14,9 @@ export class ViewRouter {
         });
         this.router.get(ViewsRoutes.CHAT, (_req, res) => {
             res.render('chat');
+        });
+        this.router.get(DefaultRoutes.OTHERS, (_req, res) => {
+            res.render('404');
         });
     }
 }
