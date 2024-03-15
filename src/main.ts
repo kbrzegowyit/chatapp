@@ -2,17 +2,18 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from "socket.io";
 import { Database } from './db/index.js';
-import { MainRoutes } from './routers/constatns.js';
+import { DefaultRoutes, MainRoutes } from './routers/constatns.js';
 import { RepositoryFactory } from './repositories/factory.js';
 import { ControllerFactory } from './controllers/factory.js';
 import { ServiceFactory } from './services/factory.js';
 import { RouterFactory } from './routers/factory.js';
+import { notFound } from './middleware/not-found.js';
+
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
-
-const PORT = process.env.PORT || 3000;
 
 new Database();
 
@@ -21,13 +22,13 @@ const serviceFactory = new ServiceFactory(repositoryFactory.factory);
 const controllerFactory = new ControllerFactory(serviceFactory.factory);
 const routerFactory = new RouterFactory(controllerFactory.factory);
 
-// Add 404 page
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.static('public'));
 
 app.use(MainRoutes.VIEWS, routerFactory.factory.viewRouter.router);
 app.use(MainRoutes.API, routerFactory.factory.apiRouter.router);
+app.use(DefaultRoutes.OTHERS, notFound);
 
 const users: { nick: string, socket: string }[] = [];
 

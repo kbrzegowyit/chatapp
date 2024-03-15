@@ -1,3 +1,8 @@
+// ** DEFAULT CONSTANTS **
+export enum DefaultRoutes {
+    OTHERS = '*',
+};
+
 // ** MAIN CONSTANTS **
 export enum MainRoutes {
     API = '/api',
