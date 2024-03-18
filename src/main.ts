@@ -22,6 +22,7 @@ const serviceFactory = new ServiceFactory(repositoryFactory.factory);
 const controllerFactory = new ControllerFactory(serviceFactory.factory);
 const routerFactory = new RouterFactory(controllerFactory.factory);
 
+app.set('views', './public/views');
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.static('public'));
