@@ -9,7 +9,7 @@ export interface IUserRepository {
 export class UserRepository implements IUserRepository {
     public async save(user: User): Promise<User> {
         try {
-            return await User.create(user);
+            return user.save();
         } catch (error) {
             console.log('UserRepository.error:', error);
             throw new Error("Failed to create user.");
