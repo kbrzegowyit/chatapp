@@ -7,7 +7,7 @@ import { RepositoryFactory } from './repositories/factory.js';
 import { ControllerFactory } from './controllers/factory.js';
 import { ServiceFactory } from './services/factory.js';
 import { RouterFactory } from './routers/factory.js';
-import { notFound } from './middleware/not-found.js';
+import { routeNotFound } from './middleware/route-not-found.js';
 
 const PORT = process.env.PORT || 3000;
 
@@ -29,7 +29,7 @@ app.use(express.static('public'));
 
 app.use(MainRoutes.VIEWS, routerFactory.factory.viewRouter.router);
 app.use(MainRoutes.API, routerFactory.factory.apiRouter.router);
-app.use(DefaultRoutes.OTHERS, notFound);
+app.use(DefaultRoutes.OTHERS, routeNotFound);
 
 const users: { nick: string, socket: string }[] = [];
 
