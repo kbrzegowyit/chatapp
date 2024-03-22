@@ -5,6 +5,7 @@ export enum DefaultRoutes {
 
 // ** MAIN CONSTANTS **
 export enum MainRoutes {
+    AUTH = '/auth',
     API = '/api',
     VIEWS = '/',
 };
@@ -20,8 +21,16 @@ export enum ViewsRoutes {
 export enum ApiRoutes {
     ROOT = '/',
     USERS = '/users',
+    LOGIN = '/login',
+    REGISTER = '/register',
 };
 
 export enum ApiParams {
     ID = '/:id',
+};
+
+// ** AUTHENTICATION CONSTANTS **
+export enum AuthenticationRoutes {
+    LOGIN = '/login',
+    REGISTER = '/register',
 };
