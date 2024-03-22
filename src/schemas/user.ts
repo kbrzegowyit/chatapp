@@ -1,10 +1,8 @@
 import Joi from "joi";
 import { CreateUserInputDto, DeleteUserInputDto, RetrieveUserInputDto } from "../dtos/user.js";
+import { RequestSchema } from "./constants.js";
 
-export type RequestPayload = { body?: Joi.ObjectSchema<any>, params?: Joi.ObjectSchema<any>, query?: Joi.ObjectSchema<any> };
-export type RequestSchema = { [key: string]: RequestPayload };
-
-export const USER_SCHEMA = {
+export const USER_SCHEMA: RequestSchema = {
     CREATE: {
         body: Joi.object({
             nick: Joi.string().required(),
@@ -21,4 +19,4 @@ export const USER_SCHEMA = {
             id: Joi.number().integer().required(),
         }) as Joi.ObjectSchema<DeleteUserInputDto>,
     },
-} as RequestSchema;
+};

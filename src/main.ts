@@ -28,6 +28,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.use(MainRoutes.VIEWS, routerFactory.factory.viewRouter.router);
+app.use(MainRoutes.AUTH, routerFactory.factory.authenticationRouter.router);
 app.use(MainRoutes.API, routerFactory.factory.apiRouter.router);
 app.use(DefaultRoutes.OTHERS, routeNotFound);
 

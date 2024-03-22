@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { RequestPayload } from "../schemas/user.js";
+import { RequestPayload } from "../schemas/constants.js";
 
 export function requestValidator(schema: RequestPayload) {
     return (req: any, res: any, next: any) => {       

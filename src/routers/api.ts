@@ -7,6 +7,7 @@ export class ApiRouter {
 
     constructor(private readonly userRouter: UserRouter) {
         this.router = Router();
+        // Admin routes
         this.router.use(ApiRoutes.USERS, this.userRouter.router);
     }
 }

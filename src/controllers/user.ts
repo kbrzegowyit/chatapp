@@ -7,7 +7,7 @@ export interface IUserController {
     deleteUser(locals: DeleteUserLocalsDto): Promise<DeleteUserOutputDto>;
 }
 
-export class UserController {
+export class UserController implements IUserController {
     constructor(private readonly userService: IUserService) {}
 
     public createUser = async (locals: CreateUserLocalsDto): Promise<CreateUserOutputDto> => {
