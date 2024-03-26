@@ -1,4 +1,5 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
 import { Server } from "socket.io";
 import { Database } from './db/index.js';
@@ -8,6 +9,10 @@ import { ControllerFactory } from './controllers/factory.js';
 import { ServiceFactory } from './services/factory.js';
 import { RouterFactory } from './routers/factory.js';
 import { routeNotFound } from './middleware/route-not-found.js';
+import { authenticationHandler } from './middleware/authentication-handler.js';
+
+// Add authentication routes
+// Add redirect to login page if not authenticated
 
 const PORT = process.env.PORT || 3000;
 
@@ -25,11 +30,12 @@ const routerFactory = new RouterFactory(controllerFactory.factory);
 app.set('views', './public/views');
 app.set('view engine', 'ejs');
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.static('public'));
 
 app.use(MainRoutes.VIEWS, routerFactory.factory.viewRouter.router);
 app.use(MainRoutes.AUTH, routerFactory.factory.authenticationRouter.router);
-app.use(MainRoutes.API, routerFactory.factory.apiRouter.router);
+app.use(MainRoutes.API, authenticationHandler(serviceFactory.factory.secureTokenService), routerFactory.factory.apiRouter.router);
 app.use(DefaultRoutes.OTHERS, routeNotFound);
 
 const users: { nick: string, socket: string }[] = [];

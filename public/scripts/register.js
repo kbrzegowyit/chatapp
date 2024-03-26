@@ -13,7 +13,7 @@ loginForm.addEventListener('submit', function(event) {
     formData.forEach((value, key) => data[key] = value);
 
     // Send a POST request to the login API
-    fetch('/auth/login', {
+    fetch('/auth/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -21,18 +21,8 @@ loginForm.addEventListener('submit', function(event) {
         body: JSON.stringify(data)
     })
     .then(response => {
-        const result = response.json();
-        console.log('Response:', result);
-        return result;
-    })
-    .then(data => {
-        console.log('Data:', data)
-        if (data.success) {
-            // Login was successful
-            console.log('Logged in successfully');
-        } else {
-            // Login failed
-            console.log('Login failed');
+        if (response.status === 200) {
+            window.location.replace('/chat');
         }
     })
     .catch(error => {
