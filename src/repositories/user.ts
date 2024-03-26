@@ -4,6 +4,7 @@ export interface IUserRepository {
     save(user: User): Promise<User>;
     retrieveById(id: number): Promise<User | null>;
     delete(id: number): Promise<number>;
+    findByNick(nick: string): Promise<User | null>;
 }
 
 export class UserRepository implements IUserRepository {
@@ -11,7 +12,6 @@ export class UserRepository implements IUserRepository {
         try {
             return user.save();
         } catch (error) {
-            console.log('UserRepository.error:', error);
             throw new Error("Failed to create user.");
         }
     }
@@ -29,5 +29,11 @@ export class UserRepository implements IUserRepository {
             throw new Error("Failed to delete user.");
         }
     }
-
+    public async findByNick(nick: string): Promise<User | null> {
+        try {
+            return await User.findOne({ where: { nick } });
+        } catch (error) {
+            throw new Error("Failed to retrieve user.");
+        }
+    }
 }

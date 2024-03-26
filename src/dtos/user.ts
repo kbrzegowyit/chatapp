@@ -1,7 +1,5 @@
-import { InferAttributes } from "@sequelize/core";
-import { User } from "../models/user.js";
 
-type UserAttributes = InferAttributes<User>;
+import { UserAttributes } from "./constants.js";
 
 // -- Local DTOs -- //
 

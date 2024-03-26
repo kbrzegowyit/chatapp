@@ -1,16 +1,15 @@
-import { LoginUserLocalsDto, RegisterUserLocalsDto, RegisterUserOutputDto } from "../dtos/authentication.js";
-import { CreateUserOutputDto } from "../dtos/user.js";
+import { LoginUserLocalsDto, LoginUserOutputDto, RegisterUserLocalsDto, RegisterUserOutputDto } from "../dtos/authentication.js";
 import { IAuthenticationService } from "../services/authentication.js";
 
 export interface IAuthenticationController {
-    login(locals: LoginUserLocalsDto): Promise<CreateUserOutputDto>;
-    register(locals: RegisterUserLocalsDto): Promise<CreateUserOutputDto>;
+    login(locals: LoginUserLocalsDto): Promise<LoginUserOutputDto>;
+    register(locals: RegisterUserLocalsDto): Promise<RegisterUserOutputDto>;
 }
 
 export class AuthenticationController implements IAuthenticationController{
     constructor(private readonly authenticationService: IAuthenticationService) {}
 
-    public login = async (locals: LoginUserLocalsDto): Promise<CreateUserOutputDto> => {
+    public login = async (locals: LoginUserLocalsDto): Promise<LoginUserOutputDto> => {
         return this.authenticationService.login(locals.body);
     }
 
