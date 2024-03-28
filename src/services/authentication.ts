@@ -4,6 +4,10 @@ import { IUserRepository } from "../repositories/user.js";
 import { ISecureCryptService } from "./sercure-crypt.js";
 import { UserAttributes } from "../dtos/constants.js";
 import { ISecureTokenService } from "./secure-token.js";
+import { UserNotFound } from "../errors/user/UserNotFound.js";
+import { InvalidPassword } from "../errors/authentication/InvalidPassword.js";
+import { UserExists } from "../errors/user/UserExists.js";
+import { PasswordNotMatch } from "../errors/authentication/PasswordNotMatch.js";
 
 export interface IAuthenticationService {
     login(loginInputDto: LoginUserInputDto): Promise<LoginUserOutputDto>;
@@ -19,10 +23,10 @@ export class AuthenticationService implements IAuthenticationService {
     
     public async login(loginInputDto: LoginUserInputDto): Promise<LoginUserOutputDto> {
         const user = await this.userRepository.findByNick(loginInputDto.nick);
-        if (!user) throw new Error("User not found");
+        if (!user) throw new UserNotFound();
 
         const isPasswordValid = await this.secureCryptService.comparePassword(loginInputDto.password, user.password);
-        if (!isPasswordValid) throw new Error("Invalid password");
+        if (!isPasswordValid) throw new InvalidPassword();
         
         const token = await this.secureTokenService.generateToken<User>(user);
         
@@ -31,10 +35,10 @@ export class AuthenticationService implements IAuthenticationService {
 
     public async register(registerInputDto: RegisterUserInputDto): Promise<RegisterUserOutputDto> {
         const userExists = await this.checkIfUserExists(registerInputDto.nick);
-        if (userExists) throw new Error("User already exists");
+        if (userExists) throw new UserExists();
 
         const passwordsMatch = await this.checkIfPasswordsMatch(registerInputDto.password, registerInputDto.confirmPassword);
-        if (!passwordsMatch) throw new Error("Passwords do not match");
+        if (!passwordsMatch) throw new PasswordNotMatch();
 
         const hashedPassword = await this.secureCryptService.hashPassword(registerInputDto.password);
         const user = User.build({ nick: registerInputDto.nick, password: hashedPassword });

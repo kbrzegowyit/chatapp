@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
+import { InvalidToken } from '../errors/authentication/InvalidToken.js';
 
 export interface ISecureTokenService {
     generateToken<T>(payload: T): Promise<string>;
-    verifyToken(token: string): Promise<string>;
+    verifyToken(token: string): string;
 }
 
 export class SecureTokenService {
@@ -16,7 +17,13 @@ export class SecureTokenService {
     async generateToken<T>(payload: T) {
         return jwt.sign({ data: payload }, this.secret, { expiresIn: this.expiresIn });
     }
-    async verifyToken(token: string) {
-        return <string>jwt.verify(token, this.secret);
+    
+    verifyToken(token: string) {
+        try {
+            const payload = jwt.verify(token, this.secret);
+            return payload as string;          
+        } catch (error) {
+            throw new InvalidToken();
+        }
     }
 }

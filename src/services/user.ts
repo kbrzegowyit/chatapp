@@ -1,10 +1,11 @@
 import { CreateUserInputDto, CreateUserOutputDto, DeleteUserInputDto, DeleteUserOutputDto, RetrieveUserInputDto, RetrieveUserOutputDto } from "../dtos/user.js";
+import { UserNotFound } from "../errors/user/UserNotFound.js";
 import { User } from "../models/user.js";
 import { IUserRepository } from "../repositories/user.js";
 
 export interface IUserService {
     createUser(userInputDto: CreateUserInputDto): Promise<CreateUserOutputDto>;
-    retrieveUserById(userInputDto: RetrieveUserInputDto): Promise<RetrieveUserOutputDto | null>;
+    retrieveUserById(userInputDto: RetrieveUserInputDto): Promise<RetrieveUserOutputDto>;
     deleteUser(userInputDto: DeleteUserInputDto): Promise<DeleteUserOutputDto>;
 }
 
@@ -17,9 +18,10 @@ export class UserService implements IUserService {
         return { id: record.id, nick: record.nick };
     }
 
-    public async retrieveUserById(userInputDto: RetrieveUserInputDto): Promise<RetrieveUserOutputDto | null> {
+    public async retrieveUserById(userInputDto: RetrieveUserInputDto): Promise<RetrieveUserOutputDto> {
         const record = await this.userRepository.retrieveById(userInputDto.id);
-        return record ? { id: record.id, nick: record.nick } : null;
+        if (!record) throw new UserNotFound();
+        return { id: record.id, nick: record.nick };
     }
 
     public async deleteUser(userInputDto: DeleteUserInputDto): Promise<DeleteUserOutputDto> {
