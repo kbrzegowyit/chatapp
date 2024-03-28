@@ -10,9 +10,7 @@ import { ServiceFactory } from './services/factory.js';
 import { RouterFactory } from './routers/factory.js';
 import { routeNotFound } from './middleware/route-not-found.js';
 import { authenticationHandler } from './middleware/authentication-handler.js';
-
-// Add authentication routes
-// Add redirect to login page if not authenticated
+import { errorHandlerMiddleware } from './middleware/error-handler.js';
 
 const PORT = process.env.PORT || 3000;
 
@@ -25,7 +23,7 @@ new Database();
 const repositoryFactory = new RepositoryFactory();
 const serviceFactory = new ServiceFactory(repositoryFactory.factory);
 const controllerFactory = new ControllerFactory(serviceFactory.factory);
-const routerFactory = new RouterFactory(controllerFactory.factory);
+const routerFactory = new RouterFactory(controllerFactory.factory, serviceFactory.factory);
 
 app.set('views', './public/views');
 app.set('view engine', 'ejs');
@@ -37,6 +35,7 @@ app.use(MainRoutes.VIEWS, routerFactory.factory.viewRouter.router);
 app.use(MainRoutes.AUTH, routerFactory.factory.authenticationRouter.router);
 app.use(MainRoutes.API, authenticationHandler(serviceFactory.factory.secureTokenService), routerFactory.factory.apiRouter.router);
 app.use(DefaultRoutes.OTHERS, routeNotFound);
+app.use(errorHandlerMiddleware(serviceFactory.factory.errorHandlerService));
 
 const users: { nick: string, socket: string }[] = [];
 

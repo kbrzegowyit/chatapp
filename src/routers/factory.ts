@@ -1,4 +1,5 @@
 import { IControllerFactory } from "../controllers/factory.js";
+import { IServiceFactory } from "../services/factory.js";
 import { ApiRouter } from "./api.js";
 import { AuthenticationRouter } from "./authentication.js";
 import { UserRouter } from "./user.js";
@@ -13,8 +14,8 @@ export interface IRouterFactory {
 export class RouterFactory {
     public factory: IRouterFactory;
 
-    constructor(private readonly controllerFactory: IControllerFactory) {
-        const viewRouter = new ViewRouter();
+    constructor(private readonly controllerFactory: IControllerFactory, private readonly serviceFactory: IServiceFactory) {
+        const viewRouter = new ViewRouter(this.serviceFactory.secureTokenService);
         const authenticationRouter = new AuthenticationRouter(this.controllerFactory.authenticationController);
         const userRouter = new UserRouter(this.controllerFactory.userController);
         const apiRouter = new ApiRouter(userRouter);
