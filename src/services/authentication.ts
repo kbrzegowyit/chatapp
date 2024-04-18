@@ -28,7 +28,7 @@ export class AuthenticationService implements IAuthenticationService {
         const isPasswordValid = await this.secureCryptService.comparePassword(loginInputDto.password, user.password);
         if (!isPasswordValid) throw new InvalidPassword();
         
-        const token = await this.secureTokenService.generateToken<User>(user);
+        const token = await this.secureTokenService.generateToken<{ id: UserAttributes['id'], nick: UserAttributes['nick'] }>({ id: user.id, nick: user.nick });
         
         return token;
     }
@@ -44,7 +44,7 @@ export class AuthenticationService implements IAuthenticationService {
         const user = User.build({ nick: registerInputDto.nick, password: hashedPassword });
         const record = await this.userRepository.save(user);
         
-        const token = await this.secureTokenService.generateToken<User>(record);
+        const token = await this.secureTokenService.generateToken<{ id: UserAttributes['id'], nick: UserAttributes['nick'] }>({ id: record.id, nick: record.nick });
 
         return token;
     }
