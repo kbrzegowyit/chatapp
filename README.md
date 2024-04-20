@@ -1,5 +1,8 @@
 # Chat Application
 
+![[License]](https://badgen.net/github/license/micromatch/micromatch)
+![GitHub last commit](https://img.shields.io/github/last-commit/kbrzegowyit/chatapp)
+
 This is a real-time chat application that allows users to communicate instantly with each other. The application is built with Node.js, Express.js, and Socket.IO, which enable real-time, bidirectional, and event-based communication.
 
 ## Features
