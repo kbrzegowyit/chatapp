@@ -1,7 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
-import { Server } from "socket.io";
 import { Database } from './db/index.js';
 import { DefaultRoutes, MainRoutes } from './routers/constatns.js';
 import { RepositoryFactory } from './repositories/factory.js';
@@ -11,12 +10,17 @@ import { RouterFactory } from './routers/factory.js';
 import { routeNotFound } from './middleware/route-not-found.js';
 import { authenticationHandler } from './middleware/authentication-handler.js';
 import { errorHandlerMiddleware } from './middleware/error-handler.js';
+import { SocketInitializer } from './sockets/initializer.js';
+
+// TODO: Add the environment variables handling
+// TODO: Add the logger
+// TODO: Remove unnecessary styles from chat.css
+// TODO: Change the type of the generateToken function in the SecureTokenService
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
 
 new Database();
 
@@ -37,24 +41,8 @@ app.use(MainRoutes.API, authenticationHandler(serviceFactory.factory.secureToken
 app.use(DefaultRoutes.OTHERS, routeNotFound);
 app.use(errorHandlerMiddleware(serviceFactory.factory.errorHandlerService));
 
-const users: { nick: string, socket: string }[] = [];
-
-io.on('connection', (socket) => {
-  socket.on('nickname', (nickname) => {
-    users.push({ nick: nickname, socket: socket.id });
-    console.log(users);
-  });
-
-  socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
-    const data = JSON.parse(msg);
-    const user = users.find((user) => user.nick === data.to);
-    console.log(user);
-    if (!user) return;
-    io.to(user.socket).emit('chat message', data.message);
-  });
-});
+new SocketInitializer(server, serviceFactory.factory.secureTokenService, serviceFactory.factory.chatNotificationService);
 
 server.listen(PORT, () => {
-  console.log('listening on port 3000');
+  console.log(`listening on port ${PORT}`);
 });

@@ -1,4 +1,5 @@
 import { IRepositoryFactory } from "../repositories/factory.js";
+import { ChatNotificationsService, IChatNotificationsService } from "../sockets/services/chat-notifications.js";
 import { AuthenticationService, IAuthenticationService } from "./authentication.js";
 import { ErrorHandlerService, IErrorHandlerService } from "./error-handler.js";
 import { ISecureTokenService, SecureTokenService } from "./secure-token.js";
@@ -9,7 +10,8 @@ export interface IServiceFactory {
     userService: IUserService;
     authenticationService: IAuthenticationService;
     secureTokenService: ISecureTokenService;
-    errorHandlerService: IErrorHandlerService
+    errorHandlerService: IErrorHandlerService;
+    chatNotificationService: IChatNotificationsService;
 }
 
 export class ServiceFactory {
@@ -21,12 +23,14 @@ export class ServiceFactory {
         const errorHandlerService = new ErrorHandlerService();
         const userService = new UserService(this.repositoryFactory.userRepository);
         const authenticationService = new AuthenticationService(this.repositoryFactory.userRepository, secureCryptService, secureTokenService);
+        const chatNotificationService = new ChatNotificationsService();
 
         this.factory = {
             userService,
             authenticationService,
             secureTokenService,
             errorHandlerService,
+            chatNotificationService,
         };
     }
     
