@@ -26,20 +26,32 @@ body {
     border-right: 1px solid #cccccc;
 }
 
+.chat-header {
+    display: none;
+    border-bottom: 1px solid #cccccc;
+}
+
+/*
+    User info
+*/
+
 .user-info {
     display: flex;
-    flex-direction: row;
     align-items: center;
     background: #aebec4;
     padding: 10px;
     border-bottom: 1px solid #cccccc;
+    flex-direction: column;
 }
 
 .user-nick {
-    display: flex;
     font-size: 18px;
-    font-style: bold;
+    margin-bottom: 5px;
 }
+
+/* 
+    User status
+*/
 
 .user-status {
     display: flex;
@@ -58,12 +70,34 @@ body {
     background-color: green;
 }
 
+/*
+    Contact list
+*/
+
 .contact-list {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
     padding: 20px;
 }
+
+.contact-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+/*
+    Chat box
+*/
 
 .chat-box {
     display: flex;
@@ -72,15 +106,6 @@ body {
     width: 70%;
     padding: 10px;
     background-color: #ffffff;
-}
-
-.search-bar, .chat-box textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: 1px solid #cccccc;
-    box-sizing: border-box;
 }
 
 .messages-container {
@@ -117,10 +142,6 @@ body {
     margin-right: 40%;
 }
 
-.active-contact {
-    background-color: #f0f0f0;
-}
-
 .input-message {
     width: 100%;
     padding: 10px;
@@ -131,37 +152,6 @@ body {
     bottom: 0;
 }
 
-.contact-card {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    background: #ffffff;
-    border: 1px solid #cccccc;
-}
-
-.contact-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.contact-info {
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
-}
-
-.contact-nick {
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-
-.contact-status {
-    font-size: 14px;
-    color: #666666;
-}
-
 .unread-messages-info {
     display: none;
     background-color: red;
@@ -170,37 +160,4 @@ body {
     padding-left: 3px;
     padding-right: 3px;
     margin-left: 5px;
-}
-
-.chat-header {
-    display: none;
-    border-bottom: 1px solid #cccccc;
-}
-
-.user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.user-info {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.user-nick {
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-
-.status-indicator {
-    width: 10px;
-    height: 10px;
-    background-color: green;
-    border-radius: 50%;
-    position: absolute;
-    right: 0;
-    top: 0;
 }

@@ -1,7 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
-import { Server } from "socket.io";
 import { Database } from './db/index.js';
 import { DefaultRoutes, MainRoutes } from './routers/constatns.js';
 import { RepositoryFactory } from './repositories/factory.js';
@@ -11,7 +10,7 @@ import { RouterFactory } from './routers/factory.js';
 import { routeNotFound } from './middleware/route-not-found.js';
 import { authenticationHandler } from './middleware/authentication-handler.js';
 import { errorHandlerMiddleware } from './middleware/error-handler.js';
-import { User } from './models/user.js';
+import { SocketInitializer } from './sockets/initializer.js';
 
 // TODO: Add the environment variables handling
 // TODO: Add the logger
@@ -22,7 +21,6 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
 
 new Database();
 
@@ -43,34 +41,7 @@ app.use(MainRoutes.API, authenticationHandler(serviceFactory.factory.secureToken
 app.use(DefaultRoutes.OTHERS, routeNotFound);
 app.use(errorHandlerMiddleware(serviceFactory.factory.errorHandlerService));
 
-const users = new Array<{ id: number; nick: string; socket: string }>();
-
-io.use((socket, next) => {
-  const token = socket.handshake.headers.cookie?.split('=')[1];
-  if (!token) return next(new Error('Authentication error'));
-  const user = serviceFactory.factory.secureTokenService.verifyToken(token) as unknown as { data: User };
-  if (!user) return next(new Error('Authentication error'));
-  users.push({ id: user.data.id, nick: user.data.nick, socket: socket.id });
-  next();
-});
-
-io.on('connection', (socket) => {
-  socket.emit('connected', users.find(user => user.socket === socket.id))
-  console.log('user connected', users.find(user => user.socket === socket.id));
-
-  io.emit('contacts-list', users);
-
-  socket.on('chat-msg', (data) => {
-    console.log('chat-msg', data, data.to.socket);
-    socket.to(data.to.socket).emit('chat-msg', { content: data.message, from: data.from });
-  });
-
-  socket.on('disconnect', () => {
-    const userIndex = users.findIndex(user => user.socket === socket.id);
-    users.splice(userIndex, 1);
-    socket.broadcast.emit('contacts-list', users);
-  });
-});
+new SocketInitializer(server, serviceFactory.factory.secureTokenService, serviceFactory.factory.chatNotificationService);
 
 server.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);

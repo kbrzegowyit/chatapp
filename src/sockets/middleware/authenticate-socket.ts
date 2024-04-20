@@ -13,7 +13,7 @@ export function authenticateSocket(secureTokenService: ISecureTokenService) {
 
         if (!user) return next(new InvalidToken());
         
-        socket.data.user = user.data;
+        socket.data.user = user.data.nick;
         next();
     }
 }

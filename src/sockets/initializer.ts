@@ -2,13 +2,14 @@ import { Server } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { authenticateSocket } from "./middleware/authenticate-socket.js";
 import { ISecureTokenService } from "../services/secure-token.js";
-import { IChatNotificationService } from "./services/chat-notification.js";
+import { IChatNotificationsService } from "./services/chat-notifications.js";
+import { SocketEventsName, SocketNamespaces } from "./types.js";
 
 export class SocketInitializer {
     constructor( 
         private readonly server: Server, 
         private readonly secureTokenService: ISecureTokenService,
-        private readonly chatNotificationService: IChatNotificationService,
+        private readonly chatNotificationService: IChatNotificationsService,
     ) {
         const io = new SocketIOServer(this.server, {
             cors: {
@@ -17,13 +18,17 @@ export class SocketInitializer {
             }
         });
 
-        const chatNotification = io.of('/chat-notifications');
+        const chatNotification = io.of(SocketNamespaces.CHAT_NOTIFICATIONS);
         chatNotification.use(authenticateSocket(this.secureTokenService));
-        chatNotification.on('connection', (socket) => {
-            this.chatNotificationService.onConnection(socket);
+        chatNotification.on(SocketEventsName.CONNECTION, (socket) => {
+            this.chatNotificationService.onConnection(chatNotification, socket);
             
-            socket.on('disconnect', () => {
-                this.chatNotificationService.onDisconnect(socket);
+            socket.on(SocketEventsName.CHAT_MESSAGE, (data: { message: string, from: string, to: string }) => {
+                this.chatNotificationService.onChatMessage(data);
+            });
+
+            socket.on(SocketEventsName.DISCONNECT, () => {
+                this.chatNotificationService.onDisconnect(chatNotification, socket);
             });
         });
     }
