@@ -16,6 +16,7 @@ import { SocketInitializer } from './sockets/initializer.js';
 // TODO: Add the logger
 // TODO: Remove unnecessary styles from chat.css
 // TODO: Change the type of the generateToken function in the SecureTokenService
+// TODO: Add envs to set host in db (dockerfile)
 
 const PORT = process.env.PORT || 3000;
 
