@@ -13,7 +13,7 @@ export class Database {
             database: 'chat_app',
             username: 'chat_app',
             password: 'chat_app_123',
-            host: 'localhost',
+            host: 'db', // localhost (db - docker)
             dialect: 'postgres',
             pool: {
                 max: 5,
