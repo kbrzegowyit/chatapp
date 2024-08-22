@@ -6,10 +6,10 @@ export function errorHandlerMiddleware (errorHandlerService: IErrorHandlerServic
         if (errorHandlerService.isTrustedError(error)) {
             const err = error as BaseError;
             await errorHandlerService.handleError(err);
-            res.status(err.statusCode).send(err.message);
+            res.status(err.statusCode).json({ message: err.message });
         } else {
             console.log('Error: ', error);
-            res.status(500).send('Something went wrong!');
+            res.status(500).json({ message: 'Something went wrong!' });
         }
     }
 }

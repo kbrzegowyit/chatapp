@@ -4,12 +4,11 @@ interface Callback {
     (...args: any[]): any;
 };
 
-export function authenticationControllerHandler(controller: Callback, statusCode: number = 200): RequestHandler {
+export function authenticationControllerHandler(controller: Callback, statusCode: number = 201): RequestHandler {
     return async (_req: Request, res: Response, next: NextFunction) => {
         try {
             const token = await controller(res.locals);
-            res.cookie('token', token, { httpOnly: true });
-            res.status(statusCode).send();
+            res.status(statusCode).json({ token });
         } catch (error) {
             next(error);
         }
