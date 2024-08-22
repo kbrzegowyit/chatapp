@@ -13,7 +13,11 @@ export class Database {
             database: 'chat_app',
             username: 'chat_app',
             password: 'chat_app_123',
+<<<<<<< Updated upstream
             host: 'localhost',
+=======
+            host: 'localhost', // localhost (db - docker)
+>>>>>>> Stashed changes
             dialect: 'postgres',
             pool: {
                 max: 5,

@@ -12,7 +12,7 @@ export class SecureTokenService {
     
     constructor() {
         this.secret = 'secret';
-        this.expiresIn = '1h';
+        this.expiresIn = '15m';
     }
     async generateToken<T>(payload: T) {
         return jwt.sign({ data: payload }, this.secret, { expiresIn: this.expiresIn });

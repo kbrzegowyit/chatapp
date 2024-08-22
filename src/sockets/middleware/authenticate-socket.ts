@@ -5,15 +5,19 @@ import { ISecureTokenService } from "../../services/secure-token.js";
 
 export function authenticateSocket(secureTokenService: ISecureTokenService) {
     return async (socket: any, next: any) => {
-        const token = socket.handshake.headers.cookie?.split('=')[1];
-        
-        if (!token) return next(new TokenNotFound());
-        
-        const user = secureTokenService.verifyToken(token) as unknown as { data: User };
+        try {
+            const token = socket.handshake.auth.token;
+            
+            if (!token) return next(new TokenNotFound());
+            
+            const user = secureTokenService.verifyToken(token) as unknown as { data: User };
 
-        if (!user) return next(new InvalidToken());
-        
-        socket.data.user = user.data.nick;
-        next();
+            if (!user) return next(new InvalidToken());
+            
+            socket.data.user = user.data.nick;
+            next();
+        } catch (error) {
+           next(error); 
+        }
     }
 }

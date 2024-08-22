@@ -1,5 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import { createServer } from 'http';
 import { Database } from './db/index.js';
 import { DefaultRoutes, MainRoutes } from './routers/constatns.js';
@@ -17,7 +18,7 @@ import { SocketInitializer } from './sockets/initializer.js';
 // TODO: Remove unnecessary styles from chat.css
 // TODO: Change the type of the generateToken function in the SecureTokenService
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 const server = createServer(app);
@@ -33,9 +34,10 @@ app.set('views', './public/views');
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.static('public'));
 
-app.use(MainRoutes.VIEWS, routerFactory.factory.viewRouter.router);
+// app.use(MainRoutes.VIEWS, routerFactory.factory.viewRouter.router);
 app.use(MainRoutes.AUTH, routerFactory.factory.authenticationRouter.router);
 app.use(MainRoutes.API, authenticationHandler(serviceFactory.factory.secureTokenService), routerFactory.factory.apiRouter.router);
 app.use(DefaultRoutes.OTHERS, routeNotFound);

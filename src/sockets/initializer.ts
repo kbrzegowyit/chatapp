@@ -13,7 +13,8 @@ export class SocketInitializer {
     ) {
         const io = new SocketIOServer(this.server, {
             cors: {
-                origin: '*',
+                origin: 'http://localhost:3000',
+                credentials: true,
                 methods: ['GET', 'POST'],
             }
         });
